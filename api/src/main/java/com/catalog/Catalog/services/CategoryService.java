@@ -5,12 +5,15 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.catalog.Catalog.dto.CategoryDTO;
 import com.catalog.Catalog.enties.Category;
 import com.catalog.Catalog.repositories.CategoryRepository;
+import com.catalog.Catalog.services.exceptions.DatabaseException;
 import com.catalog.Catalog.services.exceptions.ResourceNotFoundException;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -55,6 +58,17 @@ public class CategoryService {
             return new CategoryDTO(entity);
         } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException("Categoria não encontrada.");
+        }
+    }
+
+    public void delete(Long id) {
+        try {
+            repository.deleteById(id);
+
+        } catch (EmptyResultDataAccessException e) {
+            throw new ResourceNotFoundException("Categoria não encontrada.");
+        } catch (DataIntegrityViolationException e) {
+            throw new DatabaseException("A categoria não pode ser apagada do banco de dados");
         }
     }
 }
