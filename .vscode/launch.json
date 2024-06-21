@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-CatalogApplication<Catalog>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.catalog.Catalog.CatalogApplication",
+      "projectName": "Catalog",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}
