@@ -9,9 +9,9 @@ package com.catalog.Catalog.services.exceptions;
  *
  * @author wallace
  */
-public class EntityNotFoundException extends RuntimeException {
+public class ResourceNotFoundException extends RuntimeException {
 
-    public EntityNotFoundException(String msg) {
+    public ResourceNotFoundException(String msg) {
         super(msg);
     }
 
