@@ -3,8 +3,6 @@ package com.catalog.Catalog.services;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -15,7 +13,6 @@ import com.catalog.Catalog.enties.Category;
 import com.catalog.Catalog.enties.Product;
 import com.catalog.Catalog.repositories.CategoryRepository;
 import com.catalog.Catalog.repositories.ProductRepository;
-import com.catalog.Catalog.services.exceptions.DatabaseException;
 import com.catalog.Catalog.services.exceptions.ResourceNotFoundException;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -66,13 +63,20 @@ public class ProductService {
   }
 
   public void delete(Long id) {
-    try {
+    if (productRepository.existsById(id)) {
       productRepository.deleteById(id);
-    } catch (EmptyResultDataAccessException e) {
-      throw new ResourceNotFoundException("Produto não encontrado.");
-    } catch (DataIntegrityViolationException e) {
-      throw new DatabaseException("Não foi possível excluir o produto.");
+    } else {
+      throw new ResourceNotFoundException("Produto não encontrado");
     }
+    // try {
+    // productRepository.deleteById(id);
+    // } catch (EmptyResultDataAccessException e) {
+    // throw new ResourceNotFoundException("Produto não encontrado.");
+    // } catch (DataIntegrityViolationException e) {
+    // throw new DatabaseException("Não foi possível excluir o produto.");
+    // } catch (RuntimeException e) {
+    // throw new Error(e);
+    // }
   }
 
   private void copyDtoToEntity(ProductDTO dto, Product entity) {
