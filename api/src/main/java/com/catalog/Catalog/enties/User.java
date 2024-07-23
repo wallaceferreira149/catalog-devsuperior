@@ -3,6 +3,8 @@ package com.catalog.Catalog.enties;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.catalog.Catalog.dto.CreateUserDTO;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -37,7 +39,14 @@ public class User {
 
   private String password;
 
-  @ManyToMany
+  @ManyToMany(fetch = jakarta.persistence.FetchType.EAGER)
   @JoinTable(name = "tb_user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
   private Set<Role> roles = new HashSet<>();
+
+  public User(CreateUserDTO dto) {
+    this.firstName = dto.firstName();
+    this.lastName = dto.lastName();
+    this.email = dto.email();
+    this.password = dto.password();
+  }
 }
