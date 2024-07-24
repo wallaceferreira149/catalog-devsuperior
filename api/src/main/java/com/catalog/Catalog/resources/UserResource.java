@@ -20,6 +20,7 @@ import com.catalog.Catalog.dto.UpdateUserDTO;
 import com.catalog.Catalog.dto.UserDTO;
 import com.catalog.Catalog.services.UserService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RequestMapping("/users")
@@ -42,7 +43,8 @@ public class UserResource {
   }
 
   @PostMapping
-  public ResponseEntity<UserDTO> create(@RequestBody CreateUserDTO dto) {
+  public ResponseEntity<UserDTO> create(
+      @Valid @RequestBody CreateUserDTO dto) {
     UserDTO user = userService.create(dto);
     URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
         .buildAndExpand(user.id()).toUri();

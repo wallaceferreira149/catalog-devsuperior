@@ -2,8 +2,10 @@ package com.catalog.Catalog.services;
 
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.catalog.Catalog.dto.CreateUserDTO;
@@ -22,6 +24,9 @@ public class UserService {
 
   private final UserRepository userRepository;
 
+  @Autowired
+  private BCryptPasswordEncoder passwordEncoder;
+
   public Page<UserDTO> findAllPaged(Pageable pageable) {
     Page<User> list = userRepository.findAll(pageable);
     return list.map(UserDTO::new);
@@ -35,6 +40,7 @@ public class UserService {
 
   public UserDTO create(CreateUserDTO dto) {
     User entity = new User(dto);
+    entity.setPassword(passwordEncoder.encode(dto.password()));
     entity = userRepository.save(entity);
 
     return new UserDTO(entity);
