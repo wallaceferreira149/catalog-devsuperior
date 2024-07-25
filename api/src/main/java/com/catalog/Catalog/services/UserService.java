@@ -48,12 +48,15 @@ public class UserService {
 
   public UserDTO update(UpdateUserDTO dto, Long userId) {
     try {
-      User entity = userRepository.getReferenceById(userId);
-      entity.setFirstName(dto.firstName());
-      entity.setLastName(dto.lastName());
-      entity.setEmail(dto.email());
-      entity = userRepository.save(entity);
-      return new UserDTO(entity);
+      Optional<User> entity = userRepository.findById(userId);
+
+      // if (entity.isPresent()) {
+      entity.get().setFirstName(dto.firstName());
+      entity.get().setLastName(dto.lastName());
+      entity.get().setEmail(dto.email());
+      User user = userRepository.save(entity.get());
+      // }
+      return new UserDTO(user);
 
     } catch (EntityNotFoundException e) {
       throw new ResourceNotFoundException("Usuário não econtrado.");
